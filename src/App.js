@@ -1,13 +1,24 @@
-export default function App($target) {
-    const $item = document.createElement('div');
-    $item.innerHTML = `
-        <ul>
-            <li>1번</li>
-            <li>2번</li>
-            <li>3번</li>
-        </ul>
-    `;
-    $target.innerHTML = "<h1>HELLO</h1>";
-    $target.appendChild($item);
-    
+import Header from "./Header.js";
+import TodoForm from "./TodoForm.js";
+import TodoList from "./TodoList.js";
+import { setItem } from "./storage.js";
+
+export default function App({ $target, initialState }) {
+	new Header({
+		$target,
+		text: "Simple TodoList",
+	});
+	new TodoForm({
+		$target,
+		onSubmit: (text) => {
+			const nextState = [...todoList.state, { text }];
+			todoList.setState(nextState);
+
+			setItem("todos", JSON.stringify(nextState));
+		},
+	});
+	const todoList = new TodoList({
+		$target,
+		initialState,
+	});
 }
